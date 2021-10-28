@@ -1,4 +1,6 @@
 language: node_js
+addons:
+  ssh_known_hosts: insitehubtest.com
 node_js:
 - stable
 install:
@@ -13,6 +15,5 @@ before_install:
   -in deploy_rsa.enc -out ./deploy_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 ./deploy_rsa
-- echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - ssh-add ./deploy_rsa
 - ssh -i ./deploy_rsa ubuntu@insitehubtest.com pwd
