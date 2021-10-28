@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+- stable
+install:
+- npm install
+before_script:
+- npm run build
+after_success: npm run coverage
+script:
+- nohup npm run start
+before_install:
+- openssl aes-256-cbc -K $encrypted_dee9d8843364_key -iv $encrypted_dee9d8843364_iv
+  -in deploy_rsa.enc -out ./deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 ./deploy_rsa
+- echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- ssh-add ./deploy_rsa
+- ssh -i ./deploy_rsa ubuntu@insitehubtest.com pwd
